@@ -63,14 +63,15 @@ namespace DynamicDataDemo
                 {
                     // Subscribe to changes on C's SomeProperty
                     var unsubDisposable = c.WhenAnyValue(x => x.SomeProperty)
-                        // It fires it's current value, skip that
+                        // It immediately fires its current value, skip that
                         .Skip(1)
                         // Call refresh when C's property changes
                         .Subscribe(_ => Refresh());
                     // Return disposable for downstream use
                     return unsubDisposable;
                 })
-                // If a unsubDisposable associated with ClassC is removed, dispose it
+                // Convenience call to dispose of any unsubDisposable that we created from a ClassC that was removed from
+                // the original list(s)
                 .DisposeMany()
                 // We just made IObservable instructions above.  Need to subscribe to put them
                 // into effect.  Sort of like actually enumerating an IEnumerable.
